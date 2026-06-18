@@ -89,6 +89,7 @@ static GtkWidget * create_app_menu_button(void)
 {
     g_autoptr(GMenu) menu = g_menu_new();
     g_menu_append(menu, "Refresh", "app.refresh");
+    g_menu_append(menu,"Theme","app.theme");
     g_menu_append(menu, "About Battery Statistics", "app.about");
 
     GtkWidget *button = gtk_menu_button_new();
@@ -456,4 +457,72 @@ BatteryWindow * battery_window_new(AdwApplication *application)
     build_window(self, application);
     battery_service_start(self->service);
     return self;
+}
+
+static void appearance_changed(AdwComboRow *row, G_GNUC_UNUSED GParamSpec *pspec, G_GNUC_UNUSED gpointer user_data)
+{
+    AdwStyleManager *manager = adw_style_manager_get_default();
+    guint selected = adw_combo_row_get_selected(row);
+
+    switch (selected)
+    {
+        case 0:
+            adw_style_manager_set_color_scheme(manager, ADW_COLOR_SCHEME_DEFAULT);
+            break;
+        case 1:
+            adw_style_manager_set_color_scheme(manager, ADW_COLOR_SCHEME_FORCE_LIGHT);
+            break;
+        case 2:
+        adw_style_manager_set_color_scheme(manager, ADW_COLOR_SCHEME_FORCE_DARK);
+            break;
+   
+    }
+}
+
+void battery_window_show_preferences(BatteryWindow *self)
+{
+    g_return_if_fail(BATTERY_IS_WINDOW(self));
+    if (self->window == NULL)
+        return;
+
+    // Use the modern dialog (libadwaita 1.5+)
+    AdwPreferencesDialog *prefs = ADW_PREFERENCES_DIALOG(adw_preferences_dialog_new());
+    adw_dialog_set_title(ADW_DIALOG(prefs), "Set theme");
+    adw_preferences_dialog_set_search_enabled(prefs, FALSE);
+
+    // Appearance page
+    AdwPreferencesPage *page = ADW_PREFERENCES_PAGE(adw_preferences_page_new());
+    adw_preferences_page_set_title(page, "Appearance");
+
+    AdwPreferencesGroup *group = ADW_PREFERENCES_GROUP(adw_preferences_group_new());
+    adw_preferences_page_add(page, group);
+
+    // Combo row with three manual options
+    AdwComboRow *appearance_row = ADW_COMBO_ROW(adw_combo_row_new());
+    adw_preferences_row_set_title(ADW_PREFERENCES_ROW(appearance_row), "Theme");
+
+    // Build a simple string list
+    GtkStringList *theme_options = gtk_string_list_new(NULL);
+    gtk_string_list_append(theme_options, "System");
+    gtk_string_list_append(theme_options, "Light");
+    gtk_string_list_append(theme_options, "Dark");
+    adw_combo_row_set_model(appearance_row, G_LIST_MODEL(theme_options));
+    g_object_unref(theme_options);
+
+    // Set the initial selection based on current colour scheme
+    AdwColorScheme current = adw_style_manager_get_color_scheme(adw_style_manager_get_default());
+    if (current == ADW_COLOR_SCHEME_FORCE_LIGHT)
+        adw_combo_row_set_selected(appearance_row, 1);
+    else if (current == ADW_COLOR_SCHEME_FORCE_DARK)
+        adw_combo_row_set_selected(appearance_row, 2);
+    else
+        adw_combo_row_set_selected(appearance_row, 0); // Default / System
+
+    g_signal_connect(appearance_row, "notify::selected", G_CALLBACK(appearance_changed), NULL);
+
+    adw_preferences_group_add(group, GTK_WIDGET(appearance_row));
+    adw_preferences_dialog_add(prefs, page);
+
+    // Present as a modal dialog
+    adw_dialog_present(ADW_DIALOG(prefs), GTK_WIDGET(self->window));
 }

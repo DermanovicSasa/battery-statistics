@@ -23,6 +23,7 @@ struct _BatteryWindow
     GtkWidget *change_value;
     GtkWidget *history_note;
     GtkWidget *change_row;
+    GtkWidget *title_widget;
 
     BatteryService *service;
     BatteryChart *chart;
@@ -89,7 +90,6 @@ static GtkWidget * create_app_menu_button(void)
     g_autoptr(GMenu) menu = g_menu_new();
     g_menu_append(menu, "Refresh", "app.refresh");
     g_menu_append(menu, "About Battery Statistics", "app.about");
-    g_menu_append(menu, "Quit", "app.quit");
 
     GtkWidget *button = gtk_menu_button_new();
     gtk_menu_button_set_icon_name(GTK_MENU_BUTTON(button), "open-menu-symbolic");
@@ -281,6 +281,7 @@ static void update_main_page(BatteryWindow *self, const BatterySnapshot *snapsho
                                  duration);
     }
     gtk_label_set_text(GTK_LABEL(self->status_label), status);
+    adw_window_title_set_subtitle(ADW_WINDOW_TITLE(self->title_widget), status);
 
     g_autofree gchar *device_name = battery_snapshot_device_name(snapshot);
     gtk_label_set_text(GTK_LABEL(self->device_label), device_name);
@@ -348,8 +349,9 @@ static void build_window(BatteryWindow *self, AdwApplication *application)
                                        toolbar_view);
 
     GtkWidget *header_bar = adw_header_bar_new();
-    GtkWidget *title = adw_window_title_new("Battery Statistics", "");
-    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title);
+    GtkWidget *title_widget = adw_window_title_new("Battery Statistics", "");
+    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title_widget);
+    self->title_widget = title_widget;
     adw_header_bar_pack_end(ADW_HEADER_BAR(header_bar), create_app_menu_button());
     adw_toolbar_view_add_top_bar(ADW_TOOLBAR_VIEW(toolbar_view), header_bar);
 

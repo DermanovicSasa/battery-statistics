@@ -110,7 +110,7 @@ static GtkWidget * create_status_page(BatteryWindow *self)
                               "Battery Information Unavailable");
     adw_status_page_set_description(
         ADW_STATUS_PAGE(page),
-        "No system battery is currently available through UPower.");
+        "No battery devices detected.");
 
     GtkWidget *retry = gtk_button_new_with_label("Try Again");
     gtk_widget_add_css_class(retry, "suggested-action");

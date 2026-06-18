@@ -2,7 +2,7 @@
 
 #include "battery-window.h"
 
-#define APP_ID "org.example.BatteryStatistics"
+#define APP_ID "rs.someone.BatteryStatistics"
 #define WINDOW_DATA_KEY "battery-window-controller"
 
 static BatteryWindow * get_window_controller(GApplication *application)

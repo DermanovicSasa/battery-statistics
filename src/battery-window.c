@@ -110,7 +110,7 @@ static GtkWidget * create_status_page(BatteryWindow *self)
                               "Battery Information Unavailable");
     adw_status_page_set_description(
         ADW_STATUS_PAGE(page),
-        "No system battery is currently available through UPower.");
+        "No battery devices detected.");
 
     GtkWidget *retry = gtk_button_new_with_label("Try Again");
     gtk_widget_add_css_class(retry, "suggested-action");
@@ -350,7 +350,7 @@ static void build_window(BatteryWindow *self, AdwApplication *application)
 
     GtkWidget *header_bar = adw_header_bar_new();
     GtkWidget *title_widget = adw_window_title_new("Battery Statistics", "");
-    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title_widget);
+    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title_widgetme);
     self->title_widget = title_widget;
     adw_header_bar_pack_end(ADW_HEADER_BAR(header_bar), create_app_menu_button());
     adw_toolbar_view_add_top_bar(ADW_TOOLBAR_VIEW(toolbar_view), header_bar);

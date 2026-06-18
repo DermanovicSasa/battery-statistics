@@ -11,5 +11,5 @@ BatteryWindow *battery_window_new(AdwApplication *application);
 void battery_window_present(BatteryWindow *self);
 void battery_window_refresh(BatteryWindow *self);
 void battery_window_show_about(BatteryWindow *self);
-
+void battery_window_show_preferences(BatteryWindow *self);
 G_END_DECLS

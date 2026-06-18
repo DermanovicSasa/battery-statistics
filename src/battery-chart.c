@@ -654,7 +654,6 @@ static void battery_chart_init(BatteryChart *self)
                                    self,
                                    NULL);
     gtk_overlay_set_child(GTK_OVERLAY(self->root), self->drawing_area);
-
     self->info_card = create_info_card(self);
     gtk_overlay_add_overlay(GTK_OVERLAY(self->root), self->info_card);
 

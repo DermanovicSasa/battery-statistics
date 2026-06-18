@@ -110,8 +110,10 @@ static void draw_text(cairo_t *cr, GtkWidget *widget, const gchar *text, gdouble
     const GdkRGBA *color)
 {
     g_autoptr(PangoLayout) layout = gtk_widget_create_pango_layout(widget, text);
+    PangoContext *pctx = gtk_widget_get_pango_context(widget);
     PangoFontDescription *font = pango_font_description_new();
-    pango_font_description_set_size(font, 9 * PANGO_SCALE);
+    pango_context_get_font_description(pctx);
+    pango_font_description_set_absolute_size(font, pango_font_description_get_size(font) * 0.75);
     pango_layout_set_font_description(layout, font);
     pango_font_description_free(font);
     pango_layout_set_alignment(layout, alignment);

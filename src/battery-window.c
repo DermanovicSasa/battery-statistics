@@ -350,7 +350,7 @@ static void build_window(BatteryWindow *self, AdwApplication *application)
 
     GtkWidget *header_bar = adw_header_bar_new();
     GtkWidget *title_widget = adw_window_title_new("Battery Statistics", "");
-    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title_widgetme);
+    adw_header_bar_set_title_widget(ADW_HEADER_BAR(header_bar), title_widget);
     self->title_widget = title_widget;
     adw_header_bar_pack_end(ADW_HEADER_BAR(header_bar), create_app_menu_button());
     adw_toolbar_view_add_top_bar(ADW_TOOLBAR_VIEW(toolbar_view), header_bar);

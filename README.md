@@ -79,7 +79,6 @@ Build targets in project: 1
 ## Shortcuts
 
 - `Ctrl+R` — refresh and reconnect to UPower
-- `Ctrl+Q` — quit
 - `Tab` — focus the chart
 - `Left` / `Right` — previous or next measured hour
 - `Home` / `End` — oldest or newest measured hour
